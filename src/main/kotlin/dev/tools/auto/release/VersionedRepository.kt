@@ -1,20 +1,23 @@
-package dev.tools.semantic.release
+package dev.tools.auto.release
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.eclipse.jgit.transport.JschConfigSessionFactory
 import java.io.File
 import java.io.IOException
 import java.util.*
+
+const val SSH_FILE_PATH = "~/.ssh/id_rsa"
 
 class VersionedRepository(workingDirectory: File) {
     private val builder: FileRepositoryBuilder
     private val repository: Repository
     private val versionedTags: List<VersionedTag>
     val currentVersion: Version
-        get() = versionedTags.last().version
+        get() = versionedTags.lastOrNull()?.version ?: Version("0.0.0")
     val untaggedMessages: List<String>
 
     init {
@@ -68,6 +71,13 @@ class VersionedRepository(workingDirectory: File) {
             }
         }
         return messages
+    }
+
+    fun setTag(tagName: String) {
+        Git(repository).use { git ->
+            git.tag().setName(tagName).setMessage(tagName).setAnnotated(true).call()
+            //git.push().setTransportConfigCallback(SshConfig(SSH_FILE_PATH, null)).setPushTags().call()
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package dev.tools.semantic.release
+package dev.tools.auto.release
 
 import org.eclipse.jgit.lib.ObjectId
 

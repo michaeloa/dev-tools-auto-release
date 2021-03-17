@@ -1,4 +1,4 @@
-package dev.tools.semantic.release
+package dev.tools.auto.release
 
 object Configuration {
     const val startingVersion = "0.1.0"

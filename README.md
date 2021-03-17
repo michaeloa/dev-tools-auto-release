@@ -1,4 +1,4 @@
-# Project Name
+# auto-release
 
 <!-- PROJECT SHIELDS -->
 <!--
@@ -24,6 +24,10 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About
+
+**auto-release** is a small application that automates the semantic-versioning release workflow for software projects based on software commits. It:
+* 
+
 
 One to two paragraph statement about the project and what it does.
 

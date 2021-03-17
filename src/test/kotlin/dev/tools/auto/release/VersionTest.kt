@@ -1,6 +1,6 @@
 package no.elhub.common.build.configuration
 
-import dev.tools.semantic.release.Version
+import dev.tools.auto.release.Version
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.core.spec.style.DescribeSpec
@@ -16,7 +16,7 @@ class VersionTest : DescribeSpec({
             sut.major shouldBe 0
             sut.minor shouldBe 1
             sut.patch shouldBe 0
-            sut.prerelease.shouldBeNull()
+            sut.preRelease.shouldBeNull()
         }
 
         it("1.2.3 should return major version 1, minor version 2, patch version 3 and prerelease null") {
@@ -24,7 +24,7 @@ class VersionTest : DescribeSpec({
             sut.major shouldBe 1
             sut.minor shouldBe 2
             sut.patch shouldBe 3
-            sut.prerelease.shouldBeNull()
+            sut.preRelease.shouldBeNull()
         }
 
         it("1.2.3-RC.4 should return major version 1, minor version 2, patch version 3 and prerelease 4") {
@@ -32,7 +32,7 @@ class VersionTest : DescribeSpec({
             sut.major shouldBe 1
             sut.minor shouldBe 2
             sut.patch shouldBe 3
-            sut.prerelease shouldBe 4
+            sut.preRelease shouldBe 4
         }
 
         it("1.2 should throw an illegal state exception") {

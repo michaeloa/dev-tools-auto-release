@@ -1,2 +1,2 @@
-rootProject.name = "semantic-release"
+rootProject.name = "auto-release"
 

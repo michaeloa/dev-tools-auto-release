@@ -1,4 +1,4 @@
-package dev.tools.semantic.release
+package dev.tools.auto.release
 
 class VersionException : Exception {
 

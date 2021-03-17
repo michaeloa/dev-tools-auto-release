@@ -1,4 +1,4 @@
-package dev.tools.semantic.release
+package dev.tools.auto.release
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
