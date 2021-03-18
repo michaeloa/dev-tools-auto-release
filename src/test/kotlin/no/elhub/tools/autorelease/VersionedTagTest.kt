@@ -1,7 +1,7 @@
 package no.elhub.common.build.configuration
 
-import dev.tools.auto.release.Version
-import dev.tools.auto.release.VersionedTag
+import no.elhub.tools.autorelease.Version
+import no.elhub.tools.autorelease.VersionedTag
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.core.spec.style.DescribeSpec

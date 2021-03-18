@@ -1,4 +1,4 @@
-package dev.tools.auto.release
+package no.elhub.tools.autorelease
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

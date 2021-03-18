@@ -22,61 +22,86 @@
 * [Meta](#meta)
 
 
-<!-- ABOUT THE PROJECT -->
 ## About
 
 **auto-release** is a small application that automates the semantic-versioning release workflow for software projects based on software commits. It:
-* 
+* Determines the version number based on the git tags in the repository,
+* Parses the commit log from the last version update to determine the next version,
+* Builds and tags the new version, if required,
+* Publishes a new version of the repository.
+
+**auto-release** is built to work with a trunk-based development workflow.
 
 
-One to two paragraph statement about the project and what it does.
-
-
-<!-- GETTING STARTED -->
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+Building the application will generate a runnable jar. 
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-```sh
-npm install npm@latest -g
-```
+* Java 1.8 or later.
 
 ### Installation
 
-1. Clone the repo
+Build and test the application code using the gradle wrapper:
+
 ```sh
-git clone https://github.com/github_username/repo_name.git
-```
-2. Install NPM packages
-```sh
-npm install
+./gradlew build
 ```
 
+The runnable jar produced can then be deployed where-ever you need it (typically on your CI/CD agents).
 
-<!-- USAGE EXAMPLES -->
+Elhub employees can download the latest build of the application from the internal artifact provider.
+
+
 ## Usage
 
-Use this space to show useful examples of how the project can be used. Screenshots, code examples and demos work well in this space. You may also link to
-more resources.
+To run the project on the existing repository for a gradle project, use:
+```sh
+java -jar auto-release.jar . -p gradle
+```
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+The positional parameter can be used to specify the working directory to analyze. The "-p" option is used to specify which type of project that is being
+analyzed.
+
+The app works by analyzing the new version from Git, and then writes the next version into the appropriate file used by the project type it is working on. The 
+file with the updated version does _not_ need to be committed to git, though you can of course do so if you prefer. Note that the actual number present in the
+version file before auto-release is run, is not used by the app.
+
+The app currently allows for the following default projects:
+
+### Gradle
+
+The project should contain a gradle.properties file, storing the project version in the form:
+```properties
+version=X.Y.Z
+```
+
+The project must include a gradle wrapper (gradlew) for building and publishing the project. It assumes that the project can be published using a "publish"
+task.
+
+### Maven
+
+The project should contain a pom.xml file, storing the project version in the form:
+```xml
+<version>version=X.Y.Z</version>
+```
+
+It is assumed that the environment can run maven using the mvn command, and that the project can be built and published using a 'publish' task.
 
 
-<!-- TESTING -->
 ## Testing
 
-Explain how to run the automated tests for this system if appropriate.
+The full suite of tests can be run using:
 
-```
-Give an example
+```sh
+./gradlew test
 ```
 
-<!-- ROADMAP -->
 ## Roadmap
+
+
+
 
 See the [open issues](https://jira.elhub.cloud/link-to-issues) for a list of proposed features (and known issues).
 

@@ -1,4 +1,4 @@
-package dev.tools.auto.release
+package no.elhub.tools.autorelease
 
 import java.util.regex.Pattern
 

@@ -1,4 +1,4 @@
-package dev.tools.auto.release
+package no.elhub.tools.autorelease
 
 import picocli.CommandLine
 import java.nio.file.Paths
@@ -12,7 +12,7 @@ import kotlin.system.exitProcess
     optionListHeading = "@|bold %nOptions|@:%n",
     sortOptions = false
 )
-class AutoReleaseCli : Callable<Int> {
+class AutoRelease : Callable<Int> {
 
     @CommandLine.Parameters(
         index = "0",
@@ -84,4 +84,4 @@ class AutoReleaseCli : Callable<Int> {
     }
 }
 
-fun main(args: Array<String>): Unit = exitProcess(CommandLine(AutoReleaseCli()).execute(*args))
+fun main(args: Array<String>): Unit = exitProcess(CommandLine(AutoRelease()).execute(*args))

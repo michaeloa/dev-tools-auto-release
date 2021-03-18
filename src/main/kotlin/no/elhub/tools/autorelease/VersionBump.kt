@@ -1,4 +1,4 @@
-package dev.tools.auto.release
+package no.elhub.tools.autorelease
 
 enum class VersionBump {
     NONE,
@@ -35,4 +35,3 @@ enum class VersionBump {
     }
 
 }
-

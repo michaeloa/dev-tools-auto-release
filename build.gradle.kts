@@ -1,4 +1,3 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -17,7 +16,7 @@ val mockkVersion = "1.10.6"
 val jgitVersion = "5.11.0.202103091610-r"
 
 description = "Implement automated semantic release for gradle, maven and ansible projects."
-val mainClassName = "dev.tools.auto.release.MainKt"
+val mainClassName = "no.elhub.tools.autorelease.AutoReleaseKt"
 
 repositories {
     maven("https://jfrog.elhub.cloud/artifactory/elhub-mvn")
@@ -53,6 +52,7 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+
 /*
  * Test setup
  */
@@ -82,6 +82,7 @@ allure {
 /*
  * Application Code
  * - Create a fat jar for deployment
+ * - Run it after the jar commnad and as part of the assemble task
  */
 val fatJar = task("fatJar", type = Jar::class) {
     archiveBaseName.set(rootProject.name)
@@ -93,4 +94,7 @@ val fatJar = task("fatJar", type = Jar::class) {
     from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
     with(tasks.jar.get() as CopySpec)
+    mustRunAfter(tasks.get("jar"))
 }
+
+tasks.get("assemble").dependsOn(tasks.get("fatJar"))
