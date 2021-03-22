@@ -1,6 +1,9 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
+import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
+
 
 plugins {
     kotlin("jvm") version "1.4.31"
@@ -8,12 +11,15 @@ plugins {
     id("com.github.ben-manes.versions") version "0.36.0"
     id("com.adarshr.test-logger") version "2.1.1"
     id("io.qameta.allure") version "2.8.1"
+    id("com.jfrog.artifactory") version "4.18.3"
+    id("maven-publish") apply true
 }
 
 val allureVersion = "2.13.8"
 val kotestVersion = "4.4.1"
 val mockkVersion = "1.10.6"
 val jgitVersion = "5.11.0.202103091610-r"
+val mavenPubName = "mavenJavaBinary"
 
 description = "Implement automated semantic release for gradle, maven and ansible projects."
 val mainClassName = "no.elhub.tools.autorelease.AutoReleaseKt"
@@ -98,3 +104,24 @@ val fatJar = task("fatJar", type = Jar::class) {
 }
 
 tasks.get("assemble").dependsOn(tasks.get("fatJar"))
+
+publishing {
+    publications {
+        create<MavenPublication>(mavenPubName) {
+            from(components["java"])
+        }
+    }
+}
+
+fun Project.artifactory(configure: ArtifactoryPluginConvention.() -> Unit): Unit =
+    configure(project.convention.getPluginByName<ArtifactoryPluginConvention>("artifactory"))
+
+artifactory {
+    publish(delegateClosureOf<PublisherConfig> {
+        defaults(delegateClosureOf<groovy.lang.GroovyObject> {
+            invokeMethod("publications", mavenPubName)
+            setProperty("publishArtifacts", true)
+            setProperty("publishPom", true)
+        })
+    })
+}
