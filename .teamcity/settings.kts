@@ -5,11 +5,13 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.CheckoutMode
 import jetbrains.buildServer.configs.kotlin.v2019_2.DslContext
 import jetbrains.buildServer.configs.kotlin.v2019_2.ProjectFeature
 import jetbrains.buildServer.configs.kotlin.v2019_2.ProjectFeatures
+import jetbrains.buildServer.configs.kotlin.v2019_2.sequential
 import jetbrains.buildServer.configs.kotlin.v2019_2.Template
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.VcsTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
-import no.elhub.common.build.configuration.CreateExeGradle
+import no.elhub.common.build.configuration.AssembleGradleExecutable
+import no.elhub.common.build.configuration.SonarScan
 import no.elhub.common.build.configuration.UnitTestGradle
 
 version = "2020.2"
@@ -25,8 +27,7 @@ project {
         buildType(
             UnitTestGradle(
                 UnitTestGradle.Config(
-                    id = "UnitTest",
-                    name = "Unit Test"
+                    vcsRoot = DslContext.settingsRoot
                 )
             )
         )
@@ -34,8 +35,6 @@ project {
         buildType(
             SonarScan(
                 SonarScan.Config(
-                    id = "SonarScan",
-                    name = "Code Analysis",
                     vcsRoot = DslContext.settingsRoot,
                     sonarId = "no.elhub.tools.autorelease:dev-tools-auto-release",
                     sonarProjectSources = "src"
@@ -46,8 +45,6 @@ project {
         buildType(
             AssembleGradleExecutable(
                 AssembleGradleExecutable.Config(
-                    id = "AssembleGradleExecutable",
-                    name = "Assemble",
                     vcsRoot = DslContext.settingsRoot
                 )
             )
