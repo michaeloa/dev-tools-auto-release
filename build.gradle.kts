@@ -125,3 +125,7 @@ artifactory {
         })
     })
 }
+
+tasks.get("artifactoryPublish").dependsOn(tasks.get("assemble"))
+
+tasks.get("publish").dependsOn(tasks.get("artifactoryPublish"))
