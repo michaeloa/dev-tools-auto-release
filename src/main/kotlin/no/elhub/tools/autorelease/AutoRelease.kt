@@ -59,7 +59,7 @@ class AutoRelease : Callable<Int> {
             "${currentVersion.increase(VersionBump.MINOR)}-SNAPSHOT"
         }
         println("Next version: $nextVersionString")
-        val publishCommand: String
+        var publishCommand: String
         when (type) {
             ProjectType.GRADLE -> {
                 VersionFile.setVersion(
