@@ -1,8 +1,10 @@
 package no.elhub.tools.autorelease
 
 import picocli.CommandLine
+import java.io.File
 import java.nio.file.Paths
 import java.util.concurrent.Callable
+import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
 @CommandLine.Command(
@@ -24,6 +26,11 @@ class AutoRelease : Callable<Int> {
         names = ["-p", "--project"],
         description = ["The type of project. Valid options are: gradle, maven (defaults to maven)"])
     var project = "maven"
+
+    @CommandLine.Option(
+        names = ["-i", "--include"],
+        description = ["Property file to include in the build"])
+    var include = ""
 
     override fun call(): Int {
         val type: ProjectType
@@ -61,6 +68,8 @@ class AutoRelease : Callable<Int> {
                     String.format(StandardPattern.gradleFormat, nextVersionString)
                 )
                 publishCommand = StandardPattern.gradlePublish
+                if (include.isNotEmpty())
+                    publishCommand += "-DbuildInfoConfig.propertiesFile=$include"
             }
             ProjectType.MAVEN -> {
                 VersionFile.setVersion(
@@ -78,10 +87,20 @@ class AutoRelease : Callable<Int> {
         if (nextVersion != currentVersion) {
             repository.setTag("v$nextVersionString")
             println("Publish release...")
-            Runtime.getRuntime().exec(publishCommand)
+            publishCommand.runCommand(File("."))
+
         }
         return 0
     }
 }
 
 fun main(args: Array<String>): Unit = exitProcess(CommandLine(AutoRelease()).execute(*args))
+
+fun String.runCommand(workingDir: File) {
+    ProcessBuilder(*split(" ").toTypedArray())
+        .directory(workingDir)
+        .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        .redirectError(ProcessBuilder.Redirect.INHERIT)
+        .start()
+        .waitFor(60, TimeUnit.MINUTES)
+}
